@@ -7,7 +7,7 @@ public class DatabaseUtil {
 	
 	public static Connection getConnection() {
 		try {
-			String dbURL = "jdbc:mysql://localhost:3306/TagGrid?useSSL=false&autoReconnection=true&characterEncoding=utf8";
+			String dbURL = "jdbc:mysql://localhost:3306/TAGGRID?useSSL=false&autoReconnection=true&characterEncoding=utf8&allowPublicKeyRetrival=true";
 			String dbID = "root";
 			String dbPassword = "gowlsWkd2784";
 			Class.forName("com.mysql.cj.jdbc.Driver");
