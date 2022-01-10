@@ -3,7 +3,9 @@ package user;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
+import user.UserDTO;
 import util.DatabaseUtil;
 
 public class UserDAO {
@@ -146,5 +148,7 @@ public class UserDAO {
 		}
 		return null ; // DB오류, 회원가입 실패
 	} 
+	
+
 	
 }

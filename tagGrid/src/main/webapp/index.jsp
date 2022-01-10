@@ -2,7 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="java.net.URLEncoder" %>
-<%@ page import="user.UserDTO" %>
+<%@ page import="user.UserDAO" %>
+<%@ page import="tag.TagDAO" %>
+<%@ page import="tag.TagDTO" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +20,60 @@
 </head>
 <body>
 	
+	<%
+		request.setCharacterEncoding("UTF-8");
+		String plant = "";
+		String process = "";
+		String equip = "";
+		String tagID = "";
+		String tagKR = "";
+		String tagUse = "전체";
+		int pageNumber = 0;
+		
+		if (request.getParameter("plant") != null) {
+			plant = request.getParameter("plant");
+		}
+		if (request.getParameter("process") != null) {
+			process = request.getParameter("process");
+		}
+		if (request.getParameter("equip") != null) {
+			equip = request.getParameter("equip");
+		}
+		if (request.getParameter("tagID") != null) {
+			tagID = request.getParameter("tagID");
+		}
+		if (request.getParameter("tagKR") != null) {
+			tagKR = request.getParameter("tagKR");
+		}
+		if (request.getParameter("tagUse") != null) {
+			tagUse = request.getParameter("tagUse");
+		}
+			
+		
+		String userID = null;
+		if (session.getAttribute("userID") != null) {
+			userID = (String) session.getAttribute("userID");
+		}
+		if (userID == null) {
+			PrintWriter script = response.getWriter();
+	 		script.println("<script>");
+	 		script.println("alert('로그인을 해주세요.');");
+	 		script.println("location.href = 'userLogin.jsp';");
+	 		script.println("</script>");
+	 		script.close();
+	 		return;
+		}
+		boolean emailChecked = new UserDAO().getUserEmailChecked(userID);
+		if (emailChecked == false) {
+			PrintWriter script = response.getWriter();
+	 		script.println("<script>");;
+	 		script.println("location.href = 'emailSendConfirm.jsp';");
+	 		script.println("</script>");
+	 		script.close();
+	 		return;
+		}
+	%>
+	
 	
 	<!-- 상단 네비게이션 바 세팅 이름 / 회원정보 -->
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -30,10 +87,22 @@
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown">회원관리</a>
 					<div class="dropdown-menu" aria-labelledby="dropdown">
+					
+<%
+	if (userID == null) {
+		
+
+%>
 						<a class="dropdown-item" href="userJoin.jsp">회원가입</a>
-						<a class="dropdown-item" href="userLogin.jsp">로그인</a>		
+						<a class="dropdown-item" href="userLogin.jsp">로그인</a>	
+<%
+	} else {
+%>	
 						<a class="dropdown-item" href="userInfo.jsp">회원정보</a>
 						<a class="dropdown-item" href="userLogout.jsp">로그아웃</a>
+<%
+	}
+%>
 					</div>
 				</li>
 			</ul>
@@ -46,8 +115,8 @@
 		<form method="get" action="./index.jsp" class="form-inline mt-3">
 			<p>			
 			공장명 <select name="plant" class="form-control mx-1 mt-2">
-					<option value="(주)에스피텍">(주)에스피텍</option>
-					<option value="아이트리온">아이트리온</option>
+					<option value="(주)에스피텍" <% if(plant.equals("(주)에스피텍")) out.println("selected"); %>>(주)에스피텍</option>
+					<option value="아이트리온" <% if(plant.equals("아이트리온")) out.println("selected"); %>>아이트리온</option>
 				</select>
 			공정ID <input type="text" name="process" class="form-control mx-1 mt-2" >
 			설비ID <input type="text" name="equip" class="form-control mx-1 mt-2" >
@@ -56,9 +125,9 @@
 			Tag ID <input type="text" name="tagID" class="form-control mx-1 mt-2" >
 			Tag 한글명 <input type="text" name="tagKR" class="form-control mx-1 mt-2" >
 			사용여부 <select name="tagUse" class="form-control mx-1 mt-2">
-					<option value="전체" selected>전체</option>
-					<option value="Y">Y</option>
-					<option value="N">N</option>
+					<option value="전체" <% if(tagUse.equals("전체")) out.println("selected"); %>> 전체</option>
+					<option value="Y" <% if(tagUse.equals("Y")) out.println("selected"); %>>Y</option>
+					<option value="N" <% if(tagUse.equals("N")) out.println("selected"); %>>N</option>
 				</select>
 			<button type="submit" class="btn btn-primary mx-1 mt-2">검색</button>
 			<a class="btn btn-primary mx-1 mt-2" data-toggle="modal" href="#registerModal">등록하기</a>
@@ -70,6 +139,14 @@
 			<button type="submit" class="btn btn-secondary" style="font-size:12px">Tag 삭제</button>
 		</div>
 		
+		
+<%	
+	// 검색결과 리스트에 담는 기능 구현
+	ArrayList<TagDTO> tagList = new ArrayList<TagDTO>() ;
+	tagList = new TagDAO().getList(plant, process, equip, tagID, tagKR, tagUse);
+	if (tagList != null) {
+		
+%>
 		
 		<div class="container-fluid mt-5" style="font-size:14px" >
 			<form method="get" action="">
@@ -87,42 +164,41 @@
 							<td>공정</td>
 							<td>설비</td>
 							<td>사용여부</td>
-						</tr>
+						</tr>				
+<%
+for (int i = 0; i < tagList.size(); i++) {
+	TagDTO tag = tagList.get(i);
+
+%>
 						<tr>
-							<td>1</td>
+							<td><%= tag.getNo() %></td>
 							<td><input type="checkbox" name="checkbox"></td>
-							<td>UEA0001_TAG001</td>
-							<td>흡입 압력</td>
-							<td></td>
+							<td><%= tag.getTagID() %></td>
+							<td><%= tag.getTagKR() %></td>
+							<td><%= tag.getTagEN() %></td>
 							<td>
-								<select name="tagUse" class="form-control" style="font-size:12px">
-									<option value="" selected></option>
-									<option value="mmAq">mmAq</option>
-									<option value="℃">℃</option>
-									<option value="%">%</option>
-									<option value="m/s">m/s</option>					
-								</select>
+								<%= tag.getUOM() %>
 							</td>
 							<td>
-								<select name="plant" class="form-control" style="font-size:12px">
-									<option value="(주)에스피텍" selected>(주)에스피텍</option>
-									<option value="아이트리온">아이트리온</option>
-								</select>
+								<%= tag.getPlant() %>
 							</td>
-							<td>유틸리티 설비-공기압축기</td>
-							<td>공기압축기#1</td>
+							<td><%= tag.getProcess() %></td>
+							<td><%= tag.getEquip() %></td>
 							<td>
-								<select name="tagUse" class="form-control" style="font-size:12px">
-									<option value="Y" selected>Y</option>
-									<option value="N">N</option>
-								</select>
+								<%= tag.getTagUse() %>
 							</td>
 						</tr>
 					</thead>
+<%
+	}
+}
+%>	
 				</table>
 				</div>
 			</form>
-		</div>		
+		</div>
+		
+
 	</section>
 	
 	<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
@@ -142,14 +218,20 @@
 						<div class="form-row">
 							<div class="form-group col-sm-12">
 								<label>TagID</label>
-								<input type="text" name="process" class="form-control" maxlength="20" placeholder="UEAXXXX_TAGXXX형태로 입력">
+								<input type="text" name="tagID" class="form-control" maxlength="20" placeholder="UEAXXXX_TAGXXX형태로 입력">
 							</div>
 							
 						</div>
 						<div class="form-row">
 							<div class="form-group col-sm-12">
 								<label>Tag 한글명</label>
-								<input type="text" name="process" class="form-control" maxlength="20">
+								<input type="text" name="tagKR" class="form-control" maxlength="20">
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-sm-12">
+								<label>Tag 영문명</label>
+								<input type="text" name="tagEN" class="form-control" maxlength="20">
 							</div>
 						</div>
 						<div class="form-row">
@@ -180,7 +262,7 @@
 						<div class="form-row">
 							<div class="form-group col-sm-8">
 								<label>설비명</label>
-								<input type="text" name="process" class="form-control" maxlength="20">
+								<input type="text" name="equip" class="form-control" maxlength="20">
 							</div>
 							<div class="form-group col-sm-4">
 								<label>사용여부</label>

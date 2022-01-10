@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class TagDTO {
 	
 	private int no;
-	private String checkBox;
+	private int checkBox;
 	private String tagID;
 	private String tagKR;
 	private String tagEN;
@@ -23,10 +23,10 @@ public class TagDTO {
 	public void setNo(int no) {
 		this.no = no;
 	}
-	public String getCheckBox() {
+	public int getCheckBox() {
 		return checkBox;
 	}
-	public void setCheckBox(String checkBox) {
+	public void setCheckBox(int checkBox) {
 		this.checkBox = checkBox;
 	}
 	public String getTagID() {
@@ -83,9 +83,8 @@ public class TagDTO {
 	public void setDateTime(Timestamp dateTime) {
 		this.dateTime = dateTime;
 	}
-	public TagDTO(int no, String checkBox, String tagID, String tagKR, String tagEN, String uOM, String plant,
+	public TagDTO(int no, int checkBox, String tagID, String tagKR, String tagEN, String uOM, String plant,
 			String process, String equip, String tagUse, Timestamp dateTime) {
-		super();
 		this.no = no;
 		this.checkBox = checkBox;
 		this.tagID = tagID;
