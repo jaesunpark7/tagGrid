@@ -78,7 +78,10 @@
 				<label>비밀번호</label>
 				<input type="password" name="password" class="form-control">
 			</div>
+			
 			<button type="submit" class="btn btn-primary">로그인</button>
+			<button type="button" class="btn btn-primary ml-3" onclick="location.href = 'userJoin.jsp'">회원가입</button>
+			
 		</form>
 	</section>
 	

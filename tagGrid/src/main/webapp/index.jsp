@@ -110,33 +110,36 @@
 	</nav>
 	
 	
-	<section class="container">
+	<section class="container-fluid">
+		<div style="font-size:14px" class="mx-1 mt-3">
 		<!-- 검색창 form 만들기 -->
-		<form method="get" action="./index.jsp" class="form-inline mt-3">
-			<p>			
-			공장명 <select name="plant" class="form-control mx-1 mt-2">
+		<form method="get" action="./index.jsp" class="form-inline mt-3">		
+			공장명 <select name="plant" class="form-control mx-1">
 					<option value="(주)에스피텍" <% if(plant.equals("(주)에스피텍")) out.println("selected"); %>>(주)에스피텍</option>
 					<option value="아이트리온" <% if(plant.equals("아이트리온")) out.println("selected"); %>>아이트리온</option>
 				</select>
-			공정ID <input type="text" name="process" class="form-control mx-1 mt-2" >
-			설비ID <input type="text" name="equip" class="form-control mx-1 mt-2" >
-			</p>
-			<p>
-			Tag ID <input type="text" name="tagID" class="form-control mx-1 mt-2" >
-			Tag 한글명 <input type="text" name="tagKR" class="form-control mx-1 mt-2" >
-			사용여부 <select name="tagUse" class="form-control mx-1 mt-2">
-					<option value="전체" <% if(tagUse.equals("전체")) out.println("selected"); %>> 전체</option>
+			공정ID <input type="text" name="process" class="form-control mx-1" >
+			설비ID <input type="text" name="equip" class="form-control mx-1" >
+			Tag ID <input type="text" name="tagID" class="form-control mx-1" >
+			Tag 한글명 <input type="text" name="tagKR" class="form-control mx-1" >
+			사용여부 <select name="tagUse" class="form-control mx-1">
+					<option value="전체">전체</option>
 					<option value="Y" <% if(tagUse.equals("Y")) out.println("selected"); %>>Y</option>
 					<option value="N" <% if(tagUse.equals("N")) out.println("selected"); %>>N</option>
 				</select>
-			<button type="submit" class="btn btn-primary mx-1 mt-2">검색</button>
-			<a class="btn btn-primary mx-1 mt-2" data-toggle="modal" href="#registerModal">등록하기</a>
-			</p>
+			<button type="submit" class="btn btn-primary mx-1" style="font-size:14px">검색</button>
+			<a class="btn btn-primary mx-1" data-toggle="modal" href="#registerModal" style="font-size:14px">등록하기</a>
 		</form>
+		</div>
 		
+		
+	<div style="background-color:#F7F7F7" class="mt-3">
+		<br>
 		<!-- grid 테이블 관련 기능 정의 -->
 		<div style="font-size:12px; float:right;">
-			<button type="submit" class="btn btn-secondary" style="font-size:12px">Tag 삭제</button>
+			<button type="submit" class="btn btn-secondary mr-1" style="font-size:12px">Tag 삭제</button>
+			<button type="submit" class="btn btn-secondary mr-1" style="font-size:12px">Excel 업로드</button>
+			<button type="submit" class="btn btn-secondary mr-3" style="font-size:12px">Excel 다운로드</button>
 		</div>
 		
 		
@@ -150,8 +153,8 @@
 		
 		<div class="container-fluid mt-5" style="font-size:14px" >
 			<form method="get" action="">
-				<div class="hscroll">
-				<table class="table table-striped table-bordered">
+				<div style="overflow:auto">
+				<table class="table table-striped table-bordered" >
 					<thead>
 						<tr>
 							<td>no</td>
@@ -197,7 +200,7 @@ for (int i = 0; i < tagList.size(); i++) {
 				</div>
 			</form>
 		</div>
-		
+	</div>	
 
 	</section>
 	

@@ -85,6 +85,7 @@ public class TagDTO {
 	}
 	public TagDTO(int no, int checkBox, String tagID, String tagKR, String tagEN, String uOM, String plant,
 			String process, String equip, String tagUse, Timestamp dateTime) {
+		super();
 		this.no = no;
 		this.checkBox = checkBox;
 		this.tagID = tagID;

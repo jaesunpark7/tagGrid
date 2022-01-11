@@ -42,20 +42,20 @@ public class TagDAO {
 		}
 		
 		ArrayList<TagDTO> tagList = null;
-		String SQL = "SELECT * FROM TAG WHERE plant = ? AND process LIKE ? AND equip LIKE ? AND tagID LIKE ? AND " +
-					"tagKR LIKE ? AND tagUse LIKE ? ORDER BY no ASC";
+		String SQL = "SELECT * FROM TAG WHERE plant LIKE ? AND process LIKE ? AND equip LIKE ? AND tagID LIKE ? AND " +
+					"tagKR LIKE ? AND tagUse LIKE ? ORDER BY plant ASC, tagID ASC";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
 			conn = DatabaseUtil.getConnection();
 			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, plant);
+			pstmt.setString(1, "%" + plant+ "%");
 			pstmt.setString(2, "%" + process + "%");
 			pstmt.setString(3, "%" + equip + "%");
 			pstmt.setString(4, "%" + tagID + "%");
 			pstmt.setString(5, "%" + tagKR + "%");
-			pstmt.setString(6, tagUse);
+			pstmt.setString(6, "%" + tagUse + "%");
 			
 			rs = pstmt.executeQuery();
 			tagList = new ArrayList<TagDTO>();
