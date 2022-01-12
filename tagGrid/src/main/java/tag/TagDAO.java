@@ -86,5 +86,26 @@ public class TagDAO {
 		
 		return tagList;
 	}
+	
+	public int delete(String no) {
+		String SQL = "DELETE FROM TAG WHERE no = ?";
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = DatabaseUtil.getConnection();
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, Integer.parseInt(no));
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try { if (conn != null) conn.close(); } catch (Exception e) { e.printStackTrace(); }
+			try { if (pstmt != null) pstmt.close(); } catch (Exception e) { e.printStackTrace(); }
+		}
+		
+		return -1; // DB오류
+	}
+	
 
 }

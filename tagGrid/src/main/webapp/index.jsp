@@ -18,6 +18,8 @@
 	<!-- 커스텀 CSS 추가하기 -->
 	<link rel="stylesheet" href="./css/custom.css">
 </head>
+
+
 <body>
 	
 	<%
@@ -127,8 +129,7 @@
 					<option value="Y" <% if(tagUse.equals("Y")) out.println("selected"); %>>Y</option>
 					<option value="N" <% if(tagUse.equals("N")) out.println("selected"); %>>N</option>
 				</select>
-			<button type="submit" class="btn btn-primary mx-1" style="font-size:14px">검색</button>
-			<a class="btn btn-primary mx-1" data-toggle="modal" href="#registerModal" style="font-size:14px">등록하기</a>
+			<button type="submit" class="btn btn-primary mx-1"">검색</button>
 		</form>
 		</div>
 		
@@ -136,8 +137,10 @@
 	<div style="background-color:#F7F7F7" class="mt-3">
 		<br>
 		<!-- grid 테이블 관련 기능 정의 -->
-		<div style="font-size:12px; float:right;">
-			<button type="submit" class="btn btn-secondary mr-1" style="font-size:12px">Tag 삭제</button>
+		<div style="float:right">
+			<a class="btn btn-secondary mr-1" data-toggle="modal" href="./tagSaveAction" style="font-size:12px">저장하기</a>
+			<a class="btn btn-secondary mr-1" data-toggle="modal" href="#registerModal" style="font-size:12px">Tag 등록</a>
+			<a class="btn btn-secondary mr-1" href="./tagDeleteAction.jsp?check" onclick="return confirm('삭제하시겠습니까?')">Tag 삭제</a>
 			<button type="submit" class="btn btn-secondary mr-1" style="font-size:12px">Excel 업로드</button>
 			<button type="submit" class="btn btn-secondary mr-3" style="font-size:12px">Excel 다운로드</button>
 		</div>
@@ -149,16 +152,15 @@
 	tagList = new TagDAO().getList(plant, process, equip, tagID, tagKR, tagUse);
 	if (tagList != null) {
 		
-%>
+%>	
 		
-		<div class="container-fluid mt-5" style="font-size:14px" >
-			<form method="get" action="">
-				<div style="overflow:auto">
-				<table class="table table-striped table-bordered" >
+		<div class="container-fluid mt-5" style="font-size:14px; overflow:auto" >
+			<form method="get" action="./index.jsp">
+				<table class="table table-striped table-bordered" style="width:100%" >
 					<thead>
 						<tr>
 							<td>no</td>
-							<td><input type="checkbox" name="checkbox"></td>
+							<td><input id="allCheck" name="allCheck" type="checkbox" onclick="allChk();"/></td>
 							<td>Tag ID</td>
 							<td>Tag 한글명</td>
 							<td>Tag 영문명</td>
@@ -167,7 +169,9 @@
 							<td>공정</td>
 							<td>설비</td>
 							<td>사용여부</td>
-						</tr>				
+						</tr>
+					</thead>
+					<tbody>	
 <%
 for (int i = 0; i < tagList.size(); i++) {
 	TagDTO tag = tagList.get(i);
@@ -175,7 +179,7 @@ for (int i = 0; i < tagList.size(); i++) {
 %>
 						<tr>
 							<td><%= tag.getNo() %></td>
-							<td><input type="checkbox" name="checkbox"></td>
+							<td><input id="check" name="check" type="checkbox" name="checkbox" value="<%= tag.getNo() %>"></td>
 							<td><%= tag.getTagID() %></td>
 							<td><%= tag.getTagKR() %></td>
 							<td><%= tag.getTagEN() %></td>
@@ -191,18 +195,29 @@ for (int i = 0; i < tagList.size(); i++) {
 								<%= tag.getTagUse() %>
 							</td>
 						</tr>
-					</thead>
+					</tbody>		
+					
 <%
 	}
 }
 %>	
 				</table>
-				</div>
 			</form>
 		</div>
 	</div>	
 
 	</section>
+	
+	<!-- checkbox 선택, All 기능 적용 -->
+	<script>
+	function allChk(){
+		if ( $("#allCheck").is(':checked') ){
+			$("input[name=check]").prop("checked", true);
+		} else {
+			$("input[name=check]").prop("checked", false);
+		}
+	}
+	</script>
 	
 	<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
 		<div class="modal-dialog">
@@ -285,6 +300,8 @@ for (int i = 0; i < tagList.size(); i++) {
 			</div>
 		</div>
 	</div>
+	
+
 	
 	
 	<!-- 제이쿼리 자바스크립트 추가하기 -->
