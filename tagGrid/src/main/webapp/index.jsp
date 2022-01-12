@@ -140,7 +140,7 @@
 		<div style="float:right">
 			<a class="btn btn-secondary mr-1" data-toggle="modal" href="./tagSaveAction" style="font-size:12px">저장하기</a>
 			<a class="btn btn-secondary mr-1" data-toggle="modal" href="#registerModal" style="font-size:12px">Tag 등록</a>
-			<a class="btn btn-secondary mr-1" href="./tagDeleteAction.jsp?check" onclick="return confirm('삭제하시겠습니까?')">Tag 삭제</a>
+			<a class="btn btn-secondary mr-1" href="./tagDeleteAction.jsp?check" style="font-size:12px" onclick="return confirm('삭제하시겠습니까?')">Tag 삭제</a>
 			<button type="submit" class="btn btn-secondary mr-1" style="font-size:12px">Excel 업로드</button>
 			<button type="submit" class="btn btn-secondary mr-3" style="font-size:12px">Excel 다운로드</button>
 		</div>
