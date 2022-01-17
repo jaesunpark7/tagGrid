@@ -88,13 +88,13 @@ public class TagDAO {
 	}
 	
 	public int delete(String no) {
-		String SQL = "DELETE FROM TAG WHERE no = ?";
+		String SQL = "DELETE FROM TAG WHERE no IFNULL(?)";
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		try {
 			conn = DatabaseUtil.getConnection();
 			pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, Integer.parseInt(no));
+			pstmt.setString(1, no);
 			return pstmt.executeUpdate();
 			
 		} catch (Exception e) {

@@ -3,6 +3,7 @@
 <%@ page import="java.io.PrintWriter" %>
 <%@ page import="tag.TagDTO" %>
 <%@ page import="tag.TagDAO" %>
+<%@ page import="java.util.Arrays" %>
 
 <% 	
 		request.setCharacterEncoding("UTF-8");
@@ -20,14 +21,19 @@
 				return;
 		}
 
-		String no = null;
-
+		String [] no = null;
+		String [] deleteList = null;
+		String deleteItem = null;
 		
-		if(request.getParameter("no") != null) {
-			no = request.getParameter("no");
+		if (request.getParameterValues("deleteList") != null) {
+			deleteList = request.getParameterValues("deleteList");
+			deleteItem = deleteList[0];
+			no = deleteItem.split(",");
+			
+			// System.out.println ("체크: " + no[0]);
 		}
-
-		if (no == null) {
+		
+		if (no == null || no.length == 0) {
 			PrintWriter script = response.getWriter();
 	 		script.println("<script>");
 	 		script.println("alert('선택된 항목이 없습니다.');");
@@ -38,13 +44,13 @@
 		}
 		
 		TagDAO tagDAO = new TagDAO();
+		int result = 0;
 		
-		int result = tagDAO.delete(no) ;
 		
 		if (result == -1) {
 			PrintWriter script = response.getWriter();
 	 		script.println("<script>");
-	 		script.println("alert('강의 평가 등록 실패');");
+	 		script.println("alert('Tag 삭제 실패');");
 	 		script.println("history.back();");
 	 		script.println("</script>");
 	 		script.close();
@@ -52,6 +58,7 @@
 		} else {
 			PrintWriter script = response.getWriter();
 	 		script.println("<script>");
+	 		script.println("alert('삭제가 완료되었습니다.');");
 	 		script.println("location.href = 'index.jsp';");
 	 		script.println("</script>");
 	 		script.close();
